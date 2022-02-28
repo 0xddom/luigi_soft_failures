@@ -1,4 +1,3 @@
-from black import out
 import luigi
 import traceback
 from luigi_soft_failures.config import Config
