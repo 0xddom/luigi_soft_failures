@@ -78,6 +78,8 @@ class softly_failing:
 
 
 class SoftFailureTarget(luigi.LocalTarget):
+    is_tmp = False
+    
     def __init__(self, task_id, output_dir):
         self._task_id = task_id
         self._task_fam = task_id.split("_", 1)[0]
