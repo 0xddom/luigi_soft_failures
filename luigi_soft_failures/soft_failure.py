@@ -1,3 +1,4 @@
+from black import out
 import luigi
 import traceback
 from luigi_soft_failures.config import Config
@@ -79,10 +80,11 @@ class softly_failing:
 
 class SoftFailureTarget(luigi.LocalTarget):
     is_tmp = False
-    
+
     def __init__(self, task_id, output_dir):
         self._task_id = task_id
         self._task_fam = task_id.split("_", 1)[0]
+        self._output_dir = output_dir
         path = ensure_dir(output_dir, self._task_fam, self._task_id)
         super().__init__(path)
 
@@ -90,7 +92,7 @@ class SoftFailureTarget(luigi.LocalTarget):
     def _propagated_failure_message_part(self):
         if self._propagated():
             upstream_id = self._propagated_from()
-            part2 = SoftFailureTarget(upstream_id, self.output_dir)._propagated_failure_message_part()
+            part2 = SoftFailureTarget(upstream_id, self._output_dir)._propagated_failure_message_part()
         else:
             part2 = "\n{}".format(self._content().strip())
         return "-> {}\n{}".format(self._task_id, part2)
