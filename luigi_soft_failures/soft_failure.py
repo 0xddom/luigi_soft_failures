@@ -88,7 +88,7 @@ class SoftFailureTarget(luigi.LocalTarget):
     def _propagated_failure_message_part(self):
         if self._propagated():
             upstream_id = self._propagated_from()
-            part2 = SoftFailureTarget(upstream_id)._propagated_failure_message_part()
+            part2 = SoftFailureTarget(upstream_id, self.output_dir)._propagated_failure_message_part()
         else:
             part2 = "\n{}".format(self._content().strip())
         return "-> {}\n{}".format(self._task_id, part2)
